@@ -1,0 +1,51 @@
+{
+  "name": "cos-codex-bridge",
+  "version": "0.1.0",
+  "description": "A local, project-aware MCP bridge to Codex sessions.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bin": {
+    "cos-codex-bridge": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "scripts/install.mjs",
+    "scripts/Install.command",
+    "README.md",
+    "SECURITY.md",
+    "INSTALLER.md",
+    "LICENSE",
+    "scripts/demo.mjs",
+    "docs/FEATURES.md",
+    "docs/VERIFICATION.md",
+    "docs/QUEUE.md",
+    "docs/SECURITY-REVIEW.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "check": "tsc --noEmit",
+    "start": "node dist/cli.js",
+    "demo": "node scripts/demo.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "7.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AV-Labs-Co/cos-codex-bridge.git"
+  },
+  "homepage": "https://github.com/AV-Labs-Co/cos-codex-bridge#readme",
+  "bugs": {
+    "url": "https://github.com/AV-Labs-Co/cos-codex-bridge/issues"
+  }
+}
