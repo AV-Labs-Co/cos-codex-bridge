@@ -24,6 +24,15 @@ A local MCP server that lets a Chief of Staff client find Codex tasks, create pr
 
 Example: “Create a project for this idea, send my research to Codex, monitor the build, and follow up in the same task with the review findings.”
 
+### See the handoff
+
+<p align="center">
+  <img src="docs/assets/cos-codex-bridge-demo.webp" width="360" alt="Animated illustration of a Grok Bot Chief of Staff sending work through CoS Codex Bridge to Codex">
+</p>
+
+The animation illustrates the local handoff. It uses no private Desktop data or
+project screenshots.
+
 ## Try the safe demo
 
 This exercises the MCP workflow locally without a Codex account, model call or project changes:
