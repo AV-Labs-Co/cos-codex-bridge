@@ -133,11 +133,11 @@ Direct workers disable inherited connectors and deny permission approvals. Deskt
 | Environment | Evidence |
 |---|---|
 | Grok Bot / CoS on owner's Mac | Field-tested local CLI orchestration; installation-specific integration |
-| Standard stdio MCP client | Protocol handshake, schemas, errors and demo tested automatically |
+| Standard stdio MCP client | Protocol handshake, schemas, errors, installer and demo tested automatically on macOS and Ubuntu |
 | Codex Desktop macOS / CLI 0.153.4 | Owner-tested registration, assignment, pinning, continuity and queue delivery |
 | Codex Desktop 0.155.0-alpha.9.2 | Native metadata observed in field; sidebar rendering not certified; legacy adapter disabled |
 | Other MCP clients | Expected protocol compatibility; not individually field-certified |
-| Windows / Linux Desktop integration | Not verified; no macOS Desktop parity claim |
+| Windows runtime / Linux Desktop integration | Not verified; no macOS Desktop parity claim |
 | Ordinary ChatGPT chats | Not supported |
 | Hosted service / Composio cloud | Not provided or listed |
 
