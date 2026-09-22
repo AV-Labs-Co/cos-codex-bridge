@@ -2,9 +2,40 @@
 
 **Your Chief of Staff. Now in charge of Codex, too.**
 
+![CoS Codex Bridge connects a Grok Bot Chief of Staff to Codex projects and tasks](docs/assets/cos-codex-bridge-hero.png)
+
+[![CI](https://github.com/AV-Labs-Co/cos-codex-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/AV-Labs-Co/cos-codex-bridge/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/AV-Labs-Co/cos-codex-bridge?include_prereleases&label=release)](https://github.com/AV-Labs-Co/cos-codex-bridge/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-gold.svg)](LICENSE)
+[![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-43853d.svg)](https://nodejs.org/)
+
 A local MCP server that lets a Chief of Staff client find Codex tasks, create project work, deliver whole prompts, follow progress and continue the same conversation. Free MIT core. No bridge subscription or checkout. Your existing Codex access is required for real execution.
 
 **v0.1.0 preview.** Normal local MCP: install, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. Core workflow has passed owner field testing on macOS. Desktop-owned paused-queue recovery is a known v0.1 limitation, deferred from this release. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
+
+## What your Chief of Staff can do
+
+- Turn research or a product idea into a new Codex project and task.
+- Send the complete prompt and attached text without manual copying and pasting.
+- Find an existing Codex task, read its progress and continue the same conversation.
+- Track delivery with durable receipts instead of assuming an accepted prompt ran.
+- Rename, assign, pin and cancel scoped work across approved projects.
+- Keep local project access inside explicit allowlisted directories.
+
+Example: “Create a project for this idea, send my research to Codex, monitor the build, and follow up in the same task with the review findings.”
+
+## Try the safe demo
+
+This exercises the MCP workflow locally without a Codex account, model call or project changes:
+
+```sh
+git clone https://github.com/AV-Labs-Co/cos-codex-bridge.git
+cd cos-codex-bridge
+npm ci
+npm run demo
+```
+
+The demo prints a completed receipt, payload hash and task metadata so you can see the bridge contract before granting access to a real project.
 
 ## Easiest setup: give this link to your local assistant
 

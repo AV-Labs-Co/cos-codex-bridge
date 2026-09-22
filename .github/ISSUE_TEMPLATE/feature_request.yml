@@ -1,0 +1,24 @@
+name: Feature request
+description: Suggest a focused improvement to the Chief of Staff to Codex workflow.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow problem
+      description: What should a Chief of Staff be able to do, and where does the current handoff stop?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Safety or permission considerations
+      description: Describe any new files, projects, accounts or write access this would require.
