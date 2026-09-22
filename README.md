@@ -147,4 +147,6 @@ Native project assignment is supported through the installed experimental App Se
 
 This project focuses on reliable Chief of Staff handoffs rather than a universal superiority claim. Other Codex MCP projects solve useful adjacent workflows. We do not claim “most advanced,” all-account control or blanket autonomy.
 
-Star it to follow development, fork it for your client, and report reproducible failures with **redacted** version, state and error details. Never post full private prompts or credentials. [MIT License](LICENSE).
+[Ask an installation question or share a client recipe in GitHub Discussions](https://github.com/AV-Labs-Co/cos-codex-bridge/discussions). Use Issues for reproducible bugs, with **redacted** version, state and error details. Never post full private prompts or credentials.
+
+Star it to follow development and fork it for your client. [MIT License](LICENSE).
