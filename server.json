@@ -3,7 +3,7 @@
   "name": "io.github.av-labs-co/cos-codex-bridge",
   "title": "CoS Codex Bridge",
   "description": "Operate Codex projects and tasks from a Chief of Staff with scoped access and durable receipts.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "websiteUrl": "https://github.com/AV-Labs-Co/cos-codex-bridge",
   "repository": {
     "url": "https://github.com/AV-Labs-Co/cos-codex-bridge",
@@ -14,7 +14,7 @@
     {
       "registryType": "npm",
       "identifier": "cos-codex-bridge",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "transport": {
         "type": "stdio"
       },

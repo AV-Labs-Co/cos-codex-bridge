@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 — package and registry release candidate
+
+Align package metadata, MCP server version and the official Registry entry for the first package publication. The v0.1.0 GitHub preview tag remains an earlier source snapshot. Runtime behavior and the Desktop writer-lock limitation are unchanged.
+
 ## 0.1.0 — preview
 
 Local stdio MCP and JSON CLI; exact project/task routing; durable receipts, hashes and idempotent request IDs; text artifacts; direct-worker clarification/cancellation; Desktop registration, native assignment and pin controls; explicit Desktop queue delivery and same-item recovery when the writer is available.
