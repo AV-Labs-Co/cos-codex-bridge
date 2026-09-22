@@ -15,7 +15,7 @@ export class Rpc {
   this.child.on('error',()=>this.fail(new BridgeError('CODEX_UNAVAILABLE','Cannot start Codex. Install CLI or choose explicit demo mode.')));
   this.child.on('exit',()=>{this.fail(new BridgeError('CODEX_EXITED','Codex process exited. Check receipt before retrying.'));this.onExit();});
   this.child.stdin.on('error',()=>this.fail(new BridgeError('CODEX_EXITED','Codex input closed.')));
-  const r=await this.call('initialize',{clientInfo:{name:'cos-codex-bridge',version:'0.1.0'},capabilities:{experimentalApi:true}});
+  const r=await this.call('initialize',{clientInfo:{name:'cos-codex-bridge',version:'0.1.1'},capabilities:{experimentalApi:true}});
   this.write({method:'initialized',params:{}});return r;
  }
  private receive(m:any){if(m.id!==undefined&&m.method){this.onRequest(m.id,m.method,m.params);return;}
