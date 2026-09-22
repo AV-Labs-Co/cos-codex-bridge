@@ -3,7 +3,7 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
-  test:
+  platform-tests:
     name: test (${{ matrix.os }})
     strategy:
       fail-fast: false
@@ -21,3 +21,13 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm pack --dry-run
+  test:
+    name: test
+    if: always()
+    needs: platform-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every platform check to pass
+        env:
+          PLATFORM_RESULT: ${{ needs.platform-tests.result }}
+        run: test "$PLATFORM_RESULT" = success
