@@ -1,9 +1,22 @@
 {
   "name": "cos-codex-bridge",
   "version": "0.1.0",
-  "description": "A local, project-aware MCP bridge to Codex sessions.",
+  "description": "Local MCP for Chief of Staff agents to create, run, monitor and continue Codex projects and tasks.",
+  "author": "AV Labs",
   "type": "module",
   "license": "MIT",
+  "mcpName": "io.github.av-labs-co/cos-codex-bridge",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "codex",
+    "openai-codex",
+    "grok-bot",
+    "ai-agent",
+    "chief-of-staff",
+    "automation",
+    "local-first"
+  ],
   "engines": {
     "node": ">=22.0.0"
   },
@@ -22,7 +35,8 @@
     "docs/FEATURES.md",
     "docs/VERIFICATION.md",
     "docs/QUEUE.md",
-    "docs/SECURITY-REVIEW.md"
+    "docs/SECURITY-REVIEW.md",
+    "server.json"
   ],
   "scripts": {
     "build": "tsc",
@@ -47,5 +61,8 @@
   "homepage": "https://github.com/AV-Labs-Co/cos-codex-bridge#readme",
   "bugs": {
     "url": "https://github.com/AV-Labs-Co/cos-codex-bridge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

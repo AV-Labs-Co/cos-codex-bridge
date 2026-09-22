@@ -1,0 +1,38 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.av-labs-co/cos-codex-bridge",
+  "title": "CoS Codex Bridge",
+  "description": "Operate Codex projects and tasks from a Chief of Staff with scoped access and durable receipts.",
+  "version": "0.1.0",
+  "websiteUrl": "https://github.com/AV-Labs-Co/cos-codex-bridge",
+  "repository": {
+    "url": "https://github.com/AV-Labs-Co/cos-codex-bridge",
+    "source": "github",
+    "id": "1377354149"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "cos-codex-bridge",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "mcp"
+        }
+      ],
+      "environmentVariables": [
+        {
+          "name": "COS_BRIDGE_CONFIG",
+          "description": "Absolute path to the private config.json created by the CoS Codex Bridge installer.",
+          "format": "filepath",
+          "isRequired": true,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}
