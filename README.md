@@ -8,6 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/AV-Labs-Co/cos-codex-bridge?include_prereleases&label=release)](https://github.com/AV-Labs-Co/cos-codex-bridge/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-gold.svg)](LICENSE)
 [![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-43853d.svg)](https://nodejs.org/)
+[![CoS Codex Bridge MCP server – quality and maintenance score on Glama](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge/badges/score.svg)](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge)
 
 A local MCP server that lets a Chief of Staff client find Codex tasks, create project work, deliver whole prompts, follow progress and continue the same conversation. Free MIT core. No bridge subscription or checkout. Your existing Codex access is required for real execution.
 
@@ -132,11 +133,11 @@ Direct workers disable inherited connectors and deny permission approvals. Deskt
 | Environment | Evidence |
 |---|---|
 | Grok Bot / CoS on owner's Mac | Field-tested local CLI orchestration; installation-specific integration |
-| Standard stdio MCP client | Protocol handshake, schemas, errors and demo tested automatically |
+| Standard stdio MCP client | Protocol handshake, schemas, errors, installer and demo tested automatically on macOS and Ubuntu |
 | Codex Desktop macOS / CLI 0.153.4 | Owner-tested registration, assignment, pinning, continuity and queue delivery |
 | Codex Desktop 0.155.0-alpha.9.2 | Native metadata observed in field; sidebar rendering not certified; legacy adapter disabled |
 | Other MCP clients | Expected protocol compatibility; not individually field-certified |
-| Windows / Linux Desktop integration | Not verified; no macOS Desktop parity claim |
+| Windows runtime / Linux Desktop integration | Not verified; no macOS Desktop parity claim |
 | Ordinary ChatGPT chats | Not supported |
 | Hosted service / Composio cloud | Not provided or listed |
 
@@ -146,4 +147,6 @@ Native project assignment is supported through the installed experimental App Se
 
 This project focuses on reliable Chief of Staff handoffs rather than a universal superiority claim. Other Codex MCP projects solve useful adjacent workflows. We do not claim “most advanced,” all-account control or blanket autonomy.
 
-Star it to follow development, fork it for your client, and report reproducible failures with **redacted** version, state and error details. Never post full private prompts or credentials. [MIT License](LICENSE).
+[Ask an installation question or share a client recipe in GitHub Discussions](https://github.com/AV-Labs-Co/cos-codex-bridge/discussions). Use Issues for reproducible bugs, with **redacted** version, state and error details. Never post full private prompts or credentials.
+
+Star it to follow development and fork it for your client. [MIT License](LICENSE).

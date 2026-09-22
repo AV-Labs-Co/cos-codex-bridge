@@ -3,8 +3,15 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
-  test:
-    runs-on: macos-latest
+  platform-tests:
+    name: test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -14,3 +21,13 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm pack --dry-run
+  test:
+    name: test
+    if: always()
+    needs: platform-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every platform check to pass
+        env:
+          PLATFORM_RESULT: ${{ needs.platform-tests.result }}
+        run: test "$PLATFORM_RESULT" = success
