@@ -29,8 +29,9 @@ that check; recheck immediately before publication.
    --omit=dev`, `npm pack --dry-run` and `mcp-publisher validate server.json`.
    Check the package contents again for private paths and secrets.
 4. David signs in to npm and completes npm's security challenge. Interactive
-   package creation/publishing requires two-factor authentication; a passkey or
-   security key may also be an option on his npm account. Do not store passwords,
+   package creation/publishing requires two-factor authentication; npm currently
+   documents browser security keys such as Touch ID. Use the methods the account
+   actually offers. Do not store passwords,
    one-time codes or publishing tokens in the repository.
 5. Recheck `npm view cos-codex-bridge@0.1.1` and package-name ownership. From
    the tagged checkout, publish once with `npm publish --access public`.
