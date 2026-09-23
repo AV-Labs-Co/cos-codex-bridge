@@ -25,7 +25,7 @@ Project creation/artifact writing are explicit bridge filesystem operations even
 
 ## Reporting
 
-Email contact@aninvievelabs.com with reproduction steps and a sanitized version/config. Do not include credentials or private prompts. This is a proposed security contact, not a guaranteed SLA. Use a private channel for sensitive findings. Public release is gated on review of the exact package contents and supported Codex version.
+Email contact@aninvievelabs.com with reproduction steps and a sanitized version/config. Do not include credentials or private prompts. This is a private reporting channel; no response-time SLA is promised. Each release should be checked against its exact package contents and supported Codex version.
 
 ## Optional desktop compatibility adapter
 
