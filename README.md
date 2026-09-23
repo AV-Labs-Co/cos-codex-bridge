@@ -13,11 +13,9 @@
 
 A local MCP server that lets a Chief of Staff client find Codex tasks, create project work, deliver whole prompts, follow progress and continue the same conversation. An optional Claude Code CLI route in the same MCP does this with local project folders and saved CLI sessions. Free MIT core. No bridge subscription or checkout. Your existing Codex or Claude Code access is required for real execution.
 
-**Choose your release:** [`0.1.2` on npm](https://www.npmjs.com/package/cos-codex-bridge) is the stable Codex-only route (`@latest`). [`0.2.0-beta.1`](https://www.npmjs.com/package/cos-codex-bridge/v/0.2.0-beta.1) adds Claude Code CLI support (`@beta`) in the same MCP. Install locally, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. The Codex core workflow and the Grok Bot → Claude Code CLI handoff have passed owner field testing on macOS. Desktop-owned paused-queue recovery remains a known Codex limitation. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
+**Choose your release:** [`0.1.4` on npm](https://www.npmjs.com/package/cos-codex-bridge/v/0.1.4) is the stable Codex-only route (`@latest`). [`0.2.0-beta.1`](https://www.npmjs.com/package/cos-codex-bridge/v/0.2.0-beta.1) adds Claude Code CLI support (`@beta`) in the same MCP. Install locally, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. The Codex core workflow and the Grok Bot → Claude Code CLI handoff have passed owner field testing on macOS. Desktop-owned paused-queue recovery remains a known Codex limitation. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
 
 The bridge is indexed in the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.AV-Labs-Co%2Fcos-codex-bridge) and [Glama](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge). These are discovery listings; the bridge still installs and runs locally.
-
-In stable `0.1.2`, doctor and CLI help still display the previous runtime label `0.1.1`; the installed npm package and Registry descriptor are `0.1.2`. A follow-up release will align that display label.
 
 ## What your Chief of Staff can do
 
@@ -84,15 +82,15 @@ node scripts/install.mjs --root /absolute/path/to/your/projects
 
 The installer writes a private config, launcher and MCP snippet under `~/.local/share/cos-codex-bridge`. Keep the checkout in place. Default execution is read-only; use `--write` only for approved project edits. Choose specific project roots, never your entire home directory. Add `--codex /absolute/path/to/codex` or `--claude /absolute/path/to/claude` if either CLI is not on the MCP client's PATH. See [installer and upgrade steps](INSTALLER.md).
 
-If you prefer npm to Git, install a pinned release into a dedicated folder, then run its same local installer. Use `@0.1.2` for stable Codex only or `@0.2.0-beta.1` for Codex plus the Claude Code CLI preview:
+If you prefer npm to Git, install a pinned release into a dedicated folder, then run its same local installer. Use `@0.1.4` for stable Codex only or `@0.2.0-beta.1` for Codex plus the Claude Code CLI preview:
 
 ```sh
 mkdir -p "$HOME/.local/share/cos-codex-bridge-package"
-npm install --prefix "$HOME/.local/share/cos-codex-bridge-package" cos-codex-bridge@0.2.0-beta.1
+npm install --prefix "$HOME/.local/share/cos-codex-bridge-package" cos-codex-bridge@0.1.4
 node "$HOME/.local/share/cos-codex-bridge-package/node_modules/cos-codex-bridge/scripts/install.mjs" --root "/absolute/path/to/your/projects"
 ```
 
-Keep that package folder: the generated launcher points to it. The npm path was checked with a clean `@beta` install, isolated demo config and `doctor`. The installer does not edit any MCP client settings for you.
+Keep that package folder: the generated launcher points to it. The npm path was checked with clean stable and beta installs, isolated demo configs and `doctor`. The installer does not edit any MCP client settings for you.
 
 ```sh
 ~/.local/share/cos-codex-bridge/cos-codex-bridge doctor
