@@ -15,7 +15,7 @@ The package includes no private configuration. The installer creates a local `co
 
 ## Official MCP Registry
 
-The [official Registry record](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.AV-Labs-Co%2Fcos-codex-bridge) is live. Its last verified entry is `io.github.AV-Labs-Co/cos-codex-bridge` version `0.1.2`, npm package `cos-codex-bridge@0.1.2`. [GitHub Actions run 35862746477](https://github.com/AV-Labs-Co/cos-codex-bridge/actions/runs/35862746477) completed every publish step. The 0.1.4 Registry update is prepared but is not claimed live until the public Registry API verifies it. This is a metadata listing, not a hosted endpoint.
+The [official Registry record](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.AV-Labs-Co%2Fcos-codex-bridge) is live. Its last independently verified entry is `io.github.AV-Labs-Co/cos-codex-bridge` version `0.1.2`, npm package `cos-codex-bridge@0.1.2`. [GitHub Actions run 35862746477](https://github.com/AV-Labs-Co/cos-codex-bridge/actions/runs/35862746477) completed every publish step for that version. [Run 35875157516](https://github.com/AV-Labs-Co/cos-codex-bridge/actions/runs/35875157516) also completed its 0.1.4 publish step successfully, but the public Registry API has not yet been independently checked for 0.1.4. This is a metadata listing, not a hosted endpoint.
 
 The Registry's GitHub Actions identity permits the **case-sensitive** `io.github.AV-Labs-Co/*` namespace. Stable `0.1.2` corrected the descriptor and npm `mcpName` capitalization; MCP tool behavior was unchanged. Stable `0.1.4` also corrects the installed version label. The earlier `0.1.1` Registry attempt failed because its lowercase name did not match that identity.
 
