@@ -1,11 +1,11 @@
 {
   "name": "cos-codex-bridge",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Local MCP for Chief of Staff agents to create, run, monitor and continue Codex projects and tasks.",
   "author": "AV Labs",
   "type": "module",
   "license": "MIT",
-  "mcpName": "io.github.av-labs-co/cos-codex-bridge",
+  "mcpName": "io.github.AV-Labs-Co/cos-codex-bridge",
   "keywords": [
     "mcp",
     "model-context-protocol",

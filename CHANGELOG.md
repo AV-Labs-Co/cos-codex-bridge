@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 — Registry namespace correction
+
+Match the official MCP Registry name and npm `mcpName` to the exact case of the AV-Labs-Co GitHub organization. This is a packaging and discovery fix; the Codex MCP tools and safety behavior are unchanged from 0.1.1.
+
 ## 0.1.1 — package and registry release candidate
 
 Align package metadata, MCP server version and the official Registry entry for the first package publication. The v0.1.0 GitHub preview tag remains an earlier source snapshot. Runtime behavior and the Desktop writer-lock limitation are unchanged.
