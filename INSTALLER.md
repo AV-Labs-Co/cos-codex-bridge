@@ -2,6 +2,8 @@
 
 Prerequisites: macOS, Node 22+, npm; authenticated Codex CLI for Codex work or authenticated Claude Code CLI for Claude work. Demo needs no model login. No administrator access is needed.
 
+A Git clone of `main` currently installs the Claude Code CLI preview (`0.2.0-beta.1`). To install the stable Codex-only source instead, run `git checkout v0.1.4` in that checkout before `npm ci`. The npm stable package is `cos-codex-bridge@0.1.4`.
+
 1. Obtain the reviewed source/release and enter its directory.
 2. Run `npm ci && npm run build`.
 3. Run `node scripts/install.mjs --root /absolute/project-parent`.

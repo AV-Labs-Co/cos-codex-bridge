@@ -49,6 +49,8 @@ project screenshots.
 
 This exercises the MCP workflow locally without a Codex account, model call or project changes:
 
+This clone uses GitHub `main`, currently the Claude Code CLI preview (`0.2.0-beta.1`). To demo the stable Codex-only source instead, run `git checkout v0.1.4` after `cd cos-codex-bridge` and before `npm ci`.
+
 ```sh
 git clone https://github.com/AV-Labs-Co/cos-codex-bridge.git
 cd cos-codex-bridge
@@ -71,6 +73,8 @@ You can also download the source archive from [Releases](https://github.com/AV-L
 ## Install
 
 Requires Node.js 22+, npm, a locally authenticated Codex CLI for Codex work and/or Claude Code CLI for Claude work, and a local client supporting stdio MCP. Codex Desktop registration additionally requires Codex Desktop on macOS.
+
+The Git clone below installs the current `main` branch, which is the Claude Code CLI preview (`0.2.0-beta.1`). For the stable Codex-only source, run `git checkout v0.1.4` immediately after `cd cos-codex-bridge`, before `npm ci`. The pinned npm `@0.1.4` command below is the stable package route.
 
 ```sh
 git clone https://github.com/AV-Labs-Co/cos-codex-bridge.git
