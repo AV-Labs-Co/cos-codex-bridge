@@ -1,0 +1,49 @@
+name: Publish stable MCP Registry entry
+
+'on':
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mcp-registry-stable-0.1.1
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'AV-Labs-Co/cos-codex-bridge' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out exact stable release
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: c0bcb30d5a97c912c55a3d4e4c3750fbbcb86704
+          persist-credentials: false
+
+      - name: Verify release identity and published npm package
+        run: |
+          set -euo pipefail
+          jq -e '.name == "io.github.av-labs-co/cos-codex-bridge" and .version == "0.1.1" and .packages[0].identifier == "cos-codex-bridge" and .packages[0].version == "0.1.1"' server.json
+          curl -fsS https://registry.npmjs.org/cos-codex-bridge/0.1.1 | jq -e '.name == "cos-codex-bridge" and .version == "0.1.1" and .mcpName == "io.github.av-labs-co/cos-codex-bridge"'
+
+      - name: Download checksum-verified official publisher
+        run: |
+          set -euo pipefail
+          curl -fsSL https://github.com/modelcontextprotocol/registry/releases/download/v1.8.1/mcp-publisher_linux_amd64.tar.gz -o mcp-publisher_linux_amd64.tar.gz
+          printf '%s  %s\n' 'a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc' 'mcp-publisher_linux_amd64.tar.gz' | sha256sum --check
+          tar -xzf mcp-publisher_linux_amd64.tar.gz mcp-publisher
+          chmod +x mcp-publisher
+
+      - name: Validate exact stable descriptor
+        run: ./mcp-publisher validate server.json
+
+      - name: Authenticate using GitHub Actions identity
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish stable descriptor
+        run: ./mcp-publisher publish server.json
