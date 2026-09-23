@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0-beta.1 — Claude Code CLI route
+
+One local MCP now supports an optional `provider:"claude-code"` route alongside the default Codex route. It creates approved local project folders, starts and resumes saved Claude Code CLI sessions, finds and reads their transcripts, and shares durable request IDs, prompt/artifact hashes and cancellation. The bridge checks the returned session ID and refuses unsupported Claude Desktop session continuation rather than silently forking.
+
+This beta does not create Claude account Projects, ordinary chats, Cowork projects or Claude Desktop sidebar sessions. Codex-specific pinning, Desktop registration, queueing and Steer remain on the Codex route. Existing Codex receipt fingerprints retain their original format for replay across the upgrade.
+
 ## 0.1.1 — package and registry release candidate
 
 Align package metadata, MCP server version and the official Registry entry for the first package publication. The v0.1.0 GitHub preview tag remains an earlier source snapshot. Runtime behavior and the Desktop writer-lock limitation are unchanged.

@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.av-labs-co/cos-codex-bridge",
   "title": "CoS Codex Bridge",
-  "description": "Operate Codex projects and tasks from a Chief of Staff with scoped access and durable receipts.",
-  "version": "0.1.1",
+  "description": "Operate Codex and local Claude Code CLI projects from a Chief of Staff with scoped access and durable receipts.",
+  "version": "0.2.0-beta.1",
   "websiteUrl": "https://github.com/AV-Labs-Co/cos-codex-bridge",
   "repository": {
     "url": "https://github.com/AV-Labs-Co/cos-codex-bridge",
@@ -14,7 +14,7 @@
     {
       "registryType": "npm",
       "identifier": "cos-codex-bridge",
-      "version": "0.1.1",
+      "version": "0.2.0-beta.1",
       "transport": {
         "type": "stdio"
       },

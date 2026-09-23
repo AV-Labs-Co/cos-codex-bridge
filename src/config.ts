@@ -12,7 +12,7 @@ export const ConfigSchema = z.object({
   roots: z.array(z.string()).min(1).max(20),
   projects: z.record(z.string().regex(/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$/),z.string()).default({}),
   sandbox: z.enum(['read-only','workspace-write']).default('read-only'),
-  codexBinary: z.string().default('codex'), model: z.string().optional(),
+  codexBinary: z.string().default('codex'), claudeBinary:z.string().default('claude'), claudeConfigDir:z.string().optional(), model: z.string().optional(), claudeModel:z.string().optional(),
   desktopLegacyAssignment:z.boolean().default(false),
   stateDir: z.string().optional(), maxConcurrent: z.number().int().min(1).max(8).default(2),
   jobTimeoutSeconds: z.number().int().min(30).max(7200).default(1800)
@@ -21,6 +21,7 @@ export type Config = z.infer<typeof ConfigSchema> & { configPath: string; stateD
 export async function loadConfig(file: string): Promise<Config> {
   const configPath=await realpath(file);
   const raw=ConfigSchema.parse(JSON.parse(await readFile(configPath,'utf8')));
+  if(raw.claudeConfigDir&&!path.isAbsolute(raw.claudeConfigDir))throw new BridgeError('CONFIG','claudeConfigDir must be an absolute path.');
   const roots=await Promise.all(raw.roots.map(async p=>{
     if(!path.isAbsolute(p))throw new BridgeError('CONFIG','Roots must be absolute.');
     const r=await realpath(p);

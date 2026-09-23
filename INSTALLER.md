@@ -1,11 +1,11 @@
 # Install and remove
 
-Prerequisites: macOS, Node 22+, npm; Codex CLI with an existing authenticated account for real execution. Demo needs no Codex login. No administrator access is needed.
+Prerequisites: macOS, Node 22+, npm; authenticated Codex CLI for Codex work or authenticated Claude Code CLI for Claude work. Demo needs no model login. No administrator access is needed.
 
 1. Obtain the reviewed source/release and enter its directory.
 2. Run `npm ci && npm run build`.
 3. Run `node scripts/install.mjs --root /absolute/project-parent`.
-4. For file editing, pass `--write`. For demo, pass `--demo`. For a desktop CLI outside PATH, pass `--codex /Applications/ChatGPT.app/Contents/Resources/codex`.
+4. For file editing, pass `--write`. For demo, pass `--demo`. For a CLI outside PATH, pass `--codex /Applications/ChatGPT.app/Contents/Resources/codex` or `--claude /absolute/path/to/claude`.
 5. Run the printed launcher with `doctor`. Paste the generated `mcp-client.json` snippet into a local MCP host or use its CLI from a local-execution assistant.
 
 A convenient double-click entry is `scripts/Install.command` after prerequisites/build. It asks for a project directory and uses safe defaults. This is a launcher, not a signed native app.
@@ -13,6 +13,8 @@ A convenient double-click entry is `scripts/Install.command` after prerequisites
 Default installation folder: `~/.local/share/cos-codex-bridge`. `--prefix /absolute/path` chooses another. It contains config, state, launcher and an MCP snippet. Source remains in the original checkout; moving it breaks the launcher. No shell profile/client settings are automatically edited. Installation refuses overwrite, including configuration; inspect a partial prefix after a failed run. Do not place installation/config/state inside an allowed project root.
 
 Edit `projects` in config to give exact directories friendly aliases, e.g. `Website` and `Research`. Only configure folders you intend the assistant to access. The installer allows the supplied parent; all descendants are in scope. Use individual project roots for a narrower configuration.
+
+Claude Code needs its own supported sign-in, such as `claude auth login --claudeai` for an existing subscription. In an existing installation, add `"claudeBinary":"/absolute/path/to/claude"` to the private `config.json` if the MCP host cannot find `claude`, then restart that host and run doctor. The bridge does not create a Claude account Project or auto-place CLI sessions in Claude Desktop. See [Claude Code route](docs/CLAUDE.md).
 
 ## Updating
 
@@ -31,6 +33,7 @@ Remove the MCP entry from the client and stop invoking the launcher. Request can
 - `SIZE_LIMIT`: split the work deliberately; the bridge never cuts a prompt silently.
 - `uncertain`: inspect the returned thread and workspace before creating a new request ID.
 - No Grok connection: stdio is local. A cloud connector URL cannot directly run a process on your Mac. See the client recipe.
+- Claude authentication unavailable: run `claude auth status` in the same macOS account and `doctor` from the actual MCP host. Desktop sign-in does not itself guarantee CLI sign-in or keychain access in a sandboxed host.
 
 ## Desktop option
 
