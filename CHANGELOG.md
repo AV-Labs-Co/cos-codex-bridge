@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4 — current package instructions
+
+Refresh the stable npm README and installer instructions, including working image links and the verified local-install route. Version labels stay aligned with the published package. No MCP tool or access-policy changes.
+
 ## 0.1.3 — accurate version reporting
 
 Report the installed stable release version consistently in doctor, CLI help, MCP handshake and Codex client metadata. No tool behavior or access policy changes.

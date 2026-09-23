@@ -10,6 +10,17 @@ Prerequisites: macOS, Node 22+, npm; Codex CLI with an existing authenticated ac
 
 A convenient double-click entry is `scripts/Install.command` after prerequisites/build. It asks for a project directory and uses safe defaults. This is a launcher, not a signed native app.
 
+The [stable npm package](https://www.npmjs.com/package/cos-codex-bridge) contains the same installer. Install the pinned Codex-only release into a dedicated folder, then run its installer:
+
+```sh
+mkdir -p "$HOME/.local/share/cos-codex-bridge-package"
+npm install --prefix "$HOME/.local/share/cos-codex-bridge-package" cos-codex-bridge@0.1.4
+node "$HOME/.local/share/cos-codex-bridge-package/node_modules/cos-codex-bridge/scripts/install.mjs" --root "/absolute/path/to/your/projects"
+~/.local/share/cos-codex-bridge/cos-codex-bridge doctor
+```
+
+Keep that package folder after setup: the generated launcher uses it. The optional Claude Code CLI route remains a separate `0.2.0-beta.1` preview package.
+
 Default installation folder: `~/.local/share/cos-codex-bridge`. `--prefix /absolute/path` chooses another. It contains config, state, launcher and an MCP snippet. Source remains in the original checkout; moving it breaks the launcher. No shell profile/client settings are automatically edited. Installation refuses overwrite, including configuration; inspect a partial prefix after a failed run. Do not place installation/config/state inside an allowed project root.
 
 Edit `projects` in config to give exact directories friendly aliases, e.g. `Website` and `Research`. Only configure folders you intend the assistant to access. The installer allows the supplied parent; all descendants are in scope. Use individual project roots for a narrower configuration.
