@@ -1,6 +1,6 @@
 {
   "name": "cos-codex-bridge",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Local MCP for Chief of Staff agents to create, run, monitor and continue Codex projects and tasks.",
   "author": "AV Labs",
   "type": "module",

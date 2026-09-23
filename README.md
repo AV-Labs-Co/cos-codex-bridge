@@ -2,17 +2,20 @@
 
 **Your Chief of Staff. Now in charge of Codex, too.**
 
-![CoS Codex Bridge connects a Grok Bot Chief of Staff to Codex projects and tasks](docs/assets/cos-codex-bridge-hero.png)
+![CoS Codex Bridge connects a Grok Bot Chief of Staff to Codex projects and tasks](https://raw.githubusercontent.com/AV-Labs-Co/cos-codex-bridge/main/docs/assets/cos-codex-bridge-hero.png)
 
 [![CI](https://github.com/AV-Labs-Co/cos-codex-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/AV-Labs-Co/cos-codex-bridge/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/AV-Labs-Co/cos-codex-bridge?include_prereleases&label=release)](https://github.com/AV-Labs-Co/cos-codex-bridge/releases)
+[![npm stable](https://img.shields.io/npm/v/cos-codex-bridge?label=npm%20stable)](https://www.npmjs.com/package/cos-codex-bridge)
 [![License: MIT](https://img.shields.io/badge/license-MIT-gold.svg)](LICENSE)
 [![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-43853d.svg)](https://nodejs.org/)
 [![CoS Codex Bridge MCP server – quality and maintenance score on Glama](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge/badges/score.svg)](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge)
 
 A local MCP server that lets a Chief of Staff client find Codex tasks, create project work, deliver whole prompts, follow progress and continue the same conversation. Free MIT core. No bridge subscription or checkout. Your existing Codex access is required for real execution.
 
-**v0.1 preview.** Normal local MCP: install, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. Core workflow has passed owner field testing on macOS. Desktop-owned paused-queue recovery is a known v0.1 limitation, deferred from this release. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
+**Stable `0.1.4` is the Codex-only route.** The optional [Claude Code CLI preview](https://www.npmjs.com/package/cos-codex-bridge/v/0.2.0-beta.1) is on npm's separate `beta` tag. This is a normal local MCP: install, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. The core Codex workflow has passed owner field testing on macOS. Desktop-owned paused-queue recovery remains a known limitation. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
+
+The bridge is listed in the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.AV-Labs-Co%2Fcos-codex-bridge) and [Glama](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge). These are discovery listings, not hosted bridge endpoints. [Current source and full documentation](https://github.com/AV-Labs-Co/cos-codex-bridge).
 
 ## What your Chief of Staff can do
 
@@ -28,7 +31,7 @@ Example: “Create a project for this idea, send my research to Codex, monitor t
 ### See the handoff
 
 <p align="center">
-  <img src="docs/assets/cos-codex-bridge-demo.webp" width="360" alt="Animated illustration of a Grok Bot Chief of Staff sending work through CoS Codex Bridge to Codex">
+  <img src="https://raw.githubusercontent.com/AV-Labs-Co/cos-codex-bridge/main/docs/assets/cos-codex-bridge-demo.webp" width="360" alt="Animated illustration of a Grok Bot Chief of Staff sending work through CoS Codex Bridge to Codex">
 </p>
 
 The animation illustrates the local handoff. It uses no private Desktop data or
@@ -55,11 +58,22 @@ Copy this installation request to your Chief of Staff:
 
 > Install CoS Codex Bridge from https://github.com/AV-Labs-Co/cos-codex-bridge. Read the README and SECURITY.md first. Use only a project folder I approve, keep read-only defaults, and preserve existing client configuration. Follow the installer instructions, run doctor, and connect the generated stdio MCP entry to my local client. Tell me what passed and what still needs setup. Wait for my first task before submitting any work. Do not publish or deploy anything.
 
-You can also download the source archive from [Releases](https://github.com/AV-Labs-Co/cos-codex-bridge/releases), extract it and follow the steps below. Git cloning makes later updates easier. No npm package or hosted endpoint is required.
+You can install the pinned npm package below or download a source archive from [Releases](https://github.com/AV-Labs-Co/cos-codex-bridge/releases). No hosted endpoint is required.
 
 ## Install
 
-Requires Node.js 22+, npm, Codex CLI authenticated locally, and a local client supporting stdio MCP. Desktop registration additionally requires Codex Desktop on macOS. 
+Requires Node.js 22+, npm, Codex CLI authenticated locally, and a local client supporting stdio MCP. Desktop registration additionally requires Codex Desktop on macOS.
+
+For the stable npm package, use a dedicated folder and keep it after installation because the launcher points there:
+
+```sh
+mkdir -p "$HOME/.local/share/cos-codex-bridge-package"
+npm install --prefix "$HOME/.local/share/cos-codex-bridge-package" cos-codex-bridge@0.1.4
+node "$HOME/.local/share/cos-codex-bridge-package/node_modules/cos-codex-bridge/scripts/install.mjs" --root "/absolute/path/to/your/projects"
+~/.local/share/cos-codex-bridge/cos-codex-bridge doctor
+```
+
+To install from source instead:
 
 ```sh
 git clone https://github.com/AV-Labs-Co/cos-codex-bridge.git
