@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3 — accurate version reporting
+
+Report the installed stable release version consistently in doctor, CLI help, MCP handshake and Codex client metadata. No tool behavior or access policy changes.
+
 ## 0.1.2 — Registry namespace correction
 
 Match the official MCP Registry name and npm `mcpName` to the exact case of the AV-Labs-Co GitHub organization. This is a packaging and discovery fix; the Codex MCP tools and safety behavior are unchanged from 0.1.1.
