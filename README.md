@@ -29,6 +29,8 @@ Example: “Create a project for this idea, send my research to Codex, monitor t
 
 The same MCP can now start and continue **Claude Code CLI** work. Pass `provider:"claude-code"` to `bridge_projects`, `bridge_sessions` and `bridge_submit`; the existing Codex route remains the default. A local folder is the Claude Code project context. The bridge creates a saved CLI session there, returns a durable receipt, reads its result and follows up in the same session. This was locally tested with Claude Code 2.1.269, including a real file edit in a disposable folder.
 
+In an owner field test, the Grok Bot Chief of Staff used the installed MCP to create an allowlisted folder, send a prompt to Claude Code, read its completion, and follow up in the **same saved session**. Both bridge receipts and Claude Code's native session history were checked. This proves the local CLI handoff, not Claude Desktop or account Project control.
+
 Claude account Projects, ordinary chats, Cowork/Dispatch and Desktop-owned sessions are separate surfaces. This route does not create or control them, and a CLI session does not automatically appear in Claude Desktop's sidebar. [Claude setup, exact workflow and limits](docs/CLAUDE.md).
 
 ### See the handoff
@@ -138,7 +140,7 @@ Direct workers disable inherited connectors and deny permission approvals. Deskt
 
 | Environment | Evidence |
 |---|---|
-| Grok Bot / CoS on owner's Mac | Field-tested local CLI orchestration; installation-specific integration |
+| Grok Bot / CoS on owner's Mac | Codex orchestration and a Claude Code CLI create → complete → same-session follow-up field-tested; installation-specific integration |
 | Standard stdio MCP client | Protocol handshake, schemas, errors, installer and demo tested automatically on macOS and Ubuntu |
 | Codex Desktop macOS / CLI 0.153.4 | Owner-tested registration, assignment, pinning, continuity and queue delivery |
 | Codex Desktop 0.155.0-alpha.9.2 | Native metadata observed in field; sidebar rendering not certified; legacy adapter disabled |

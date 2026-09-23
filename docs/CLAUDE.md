@@ -26,4 +26,6 @@ Claude Code CLI does not expose the Codex Desktop project registration, task pin
 
 The initial 2026-09-23 macOS field check used Claude Code 2.1.269: a read-only first prompt completed with the exact marker, a follow-up in the same ID recalled it, and a separate restricted write-mode prompt created a file with exact verified content. These are local Claude Code CLI proofs, not Claude Desktop sidebar proofs. Automated tests cover allowlist routing, Desktop-session refusal, cancellation, prompt/artifact hashes, idempotency and fork detection.
 
+A separate Chief of Staff field test on the same date used Grok Bot's installed bridge to create one approved local folder, submit a marker prompt, receive a completed receipt, and follow up in the same Claude Code CLI session. Both receipts and the native Claude Code session file were independently checked. The test did not open or control a Claude Desktop or claude.ai Project.
+
 Anthropic documents [CLI session IDs and resume](https://code.claude.com/docs/en/cli-reference), [Desktop's separate CLI session list](https://code.claude.com/docs/en/desktop), and [strict sandbox settings](https://code.claude.com/docs/en/sandboxing). Their interfaces can change; doctor and receipts should be checked on the installed version.
