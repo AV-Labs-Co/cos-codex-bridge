@@ -10,9 +10,9 @@
 [![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-43853d.svg)](https://nodejs.org/)
 [![CoS Codex Bridge MCP server – quality and maintenance score on Glama](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge/badges/score.svg)](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge)
 
-A local MCP server that lets a Chief of Staff client find Codex tasks, create project work, deliver whole prompts, follow progress and continue the same conversation. Free MIT core. No bridge subscription or checkout. Your existing Codex access is required for real execution.
+A local MCP server that lets a Chief of Staff client find Codex tasks, create project work, deliver whole prompts, follow progress and continue the same conversation. An optional Claude Code CLI route in the same MCP does this with local project folders and saved CLI sessions. Free MIT core. No bridge subscription or checkout. Your existing Codex or Claude Code access is required for real execution.
 
-**v0.1 preview.** Normal local MCP: install, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. Core workflow has passed owner field testing on macOS. Desktop-owned paused-queue recovery is a known v0.1 limitation, deferred from this release. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
+**v0.2 beta.** Normal local MCP: install, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. The Codex core workflow has passed owner field testing on macOS; the Claude Code CLI route has passed local project/session tests. Desktop-owned paused-queue recovery remains a known Codex limitation. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
 
 ## What your Chief of Staff can do
 
@@ -24,6 +24,12 @@ A local MCP server that lets a Chief of Staff client find Codex tasks, create pr
 - Keep local project access inside explicit allowlisted directories.
 
 Example: “Create a project for this idea, send my research to Codex, monitor the build, and follow up in the same task with the review findings.”
+
+### Claude Code route (beta)
+
+The same MCP can now start and continue **Claude Code CLI** work. Pass `provider:"claude-code"` to `bridge_projects`, `bridge_sessions` and `bridge_submit`; the existing Codex route remains the default. A local folder is the Claude Code project context. The bridge creates a saved CLI session there, returns a durable receipt, reads its result and follows up in the same session. This was locally tested with Claude Code 2.1.269, including a real file edit in a disposable folder.
+
+Claude account Projects, ordinary chats, Cowork/Dispatch and Desktop-owned sessions are separate surfaces. This route does not create or control them, and a CLI session does not automatically appear in Claude Desktop's sidebar. [Claude setup, exact workflow and limits](docs/CLAUDE.md).
 
 ### See the handoff
 
@@ -59,7 +65,7 @@ You can also download the source archive from [Releases](https://github.com/AV-L
 
 ## Install
 
-Requires Node.js 22+, npm, Codex CLI authenticated locally, and a local client supporting stdio MCP. Desktop registration additionally requires Codex Desktop on macOS. 
+Requires Node.js 22+, npm, a locally authenticated Codex CLI for Codex work and/or Claude Code CLI for Claude work, and a local client supporting stdio MCP. Codex Desktop registration additionally requires Codex Desktop on macOS.
 
 ```sh
 git clone https://github.com/AV-Labs-Co/cos-codex-bridge.git
@@ -69,13 +75,13 @@ npm test
 node scripts/install.mjs --root /absolute/path/to/your/projects
 ```
 
-The installer writes a private config, launcher and MCP snippet under `~/.local/share/cos-codex-bridge`. Keep the checkout in place. Default execution is read-only; use `--write` only for approved project edits. Choose specific project roots, never your entire home directory. Add `--codex /absolute/path/to/codex` if Codex is not on PATH. See [installer and upgrade steps](INSTALLER.md).
+The installer writes a private config, launcher and MCP snippet under `~/.local/share/cos-codex-bridge`. Keep the checkout in place. Default execution is read-only; use `--write` only for approved project edits. Choose specific project roots, never your entire home directory. Add `--codex /absolute/path/to/codex` or `--claude /absolute/path/to/claude` if either CLI is not on the MCP client's PATH. See [installer and upgrade steps](INSTALLER.md).
 
 ```sh
 ~/.local/share/cos-codex-bridge/cos-codex-bridge doctor
 ```
 
-Check `codexAvailable`, `mode`, `sandbox` and `roots`. Doctor reports capabilities and installation health, not authentication success or visual verification. For a model-free demo, install into a separate prefix with `--demo`.
+Check `codexAvailable`, `claudeCodeAvailable`, `claudeCodeAuthenticated`, `mode`, `sandbox` and `roots`. The Claude sign-in check is made from the MCP host's process and may differ from a sandboxed terminal; doctor does not verify Desktop sidebar rendering. For a model-free demo, install into a separate prefix with `--demo`.
 
 Paste the generated `mcp-client.json` into your client's MCP configuration. Equivalent shape:
 
@@ -137,6 +143,8 @@ Direct workers disable inherited connectors and deny permission approvals. Deskt
 | Codex Desktop macOS / CLI 0.153.4 | Owner-tested registration, assignment, pinning, continuity and queue delivery |
 | Codex Desktop 0.155.0-alpha.9.2 | Native metadata observed in field; sidebar rendering not certified; legacy adapter disabled |
 | Other MCP clients | Expected protocol compatibility; not individually field-certified |
+| Claude Code CLI 2.1.269 | Local create, complete, read and same-session follow-up verified; restricted file write verified in a disposable folder |
+| Claude Desktop/Claude account Projects | No creation, sidebar registration, pinning or live-session control claim; saved local transcript may be readable but not resumable through this route |
 | Windows runtime / Linux Desktop integration | Not verified; no macOS Desktop parity claim |
 | Ordinary ChatGPT chats | Not supported |
 | Hosted service / Composio cloud | Not provided or listed |

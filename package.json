@@ -1,6 +1,6 @@
 {
   "name": "cos-codex-bridge",
-  "version": "0.1.1",
+  "version": "0.2.0-beta.1",
   "description": "Local MCP for Chief of Staff agents to create, run, monitor and continue Codex projects and tasks.",
   "author": "AV Labs",
   "type": "module",
@@ -11,6 +11,7 @@
     "model-context-protocol",
     "codex",
     "openai-codex",
+    "claude-code",
     "grok-bot",
     "ai-agent",
     "chief-of-staff",
@@ -35,6 +36,7 @@
     "docs/FEATURES.md",
     "docs/VERIFICATION.md",
     "docs/QUEUE.md",
+    "docs/CLAUDE.md",
     "docs/SECURITY-REVIEW.md",
     "server.json"
   ],

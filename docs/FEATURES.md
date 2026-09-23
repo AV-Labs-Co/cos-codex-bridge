@@ -8,6 +8,8 @@ Capability #13 remains deferred for v0.1, not a ship blocker. No experimental ow
 
 Twelve v0.1 capabilities with explicit verification status; not an exhaustive competitor ranking. Capability #13 is deferred and listed below only as a known limitation.
 
+The v0.2 beta adds an optional Claude Code CLI route to this same MCP. It handles allowlisted local folders, saved CLI sessions, follow-ups, receipts and text artifacts. It does not create Claude account Projects, ordinary chats or Claude Desktop sidebar sessions. See [Claude Code support](CLAUDE.md).
+
 1. Exact-project discovery and external-task continuity with pagination.
 2. Separate folder creation, Desktop registration and task assignment.
 3. New tasks and follow-ups without copying prompts between interfaces.

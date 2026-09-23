@@ -34,3 +34,9 @@ With explicit desktopLegacyAssignment:true, the bridge may edit the two legacy d
 ## Explicit Desktop queue boundary
 
 `acceptDesktopPolicy:true` is mandatory for queue routing. This route inherits the already-existing task's policy; the bridge's restricted direct-worker sandbox does not constrain that Desktop task. Queue receipts do not imply permission approval or publication authorization. No prompt is put into a shell command line. No queue operation steals a writer, forks a task or treats missing correlation as delivery. A lost acknowledgement is uncertain. Direct-worker cancellation cannot cancel Desktop queue work.
+
+## Claude Code CLI route
+
+The optional `provider:"claude-code"` route uses an allowlisted local folder, validates the saved session's folder before resuming, sends prompts over stdin rather than command arguments, and checks the returned session ID before calling a turn complete. It does not connect to Claude Desktop's live writer or ordinary Claude chats. Text artifacts and full prompts are stored in the same private bridge receipt directory, and Claude Code writes its own local transcripts. Both are plaintext on disk.
+
+Claude starts with `--restricted`, an explicit small tool set, no inherited MCP servers, no Chrome integration, no permission prompts, and a minimal child environment. Read-only mode exposes file-reading tools only. Workspace-write mode permits file editing and Bash inside Claude's strict sandbox, with `failIfUnavailable:true`, no unsandboxed retry and no shell network domains. This is defense in depth; Anthropic's sandbox and permission system, not the bridge allowlist alone, enforce tool isolation. The model still sends prompts to Anthropic. Do not place secrets in approved project folders or infer that a `completed` receipt verifies the model's work.
