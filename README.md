@@ -15,7 +15,7 @@ A local MCP server that lets a Chief of Staff client find Codex tasks, create pr
 
 **Choose your release:** [`0.1.2` on npm](https://www.npmjs.com/package/cos-codex-bridge) is the stable Codex-only route (`@latest`). [`0.2.0-beta.1`](https://www.npmjs.com/package/cos-codex-bridge/v/0.2.0-beta.1) adds Claude Code CLI support (`@beta`) in the same MCP. Install locally, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. The Codex core workflow and the Grok Bot → Claude Code CLI handoff have passed owner field testing on macOS. Desktop-owned paused-queue recovery remains a known Codex limitation. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
 
-You can also find the [Glama directory listing](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge). This remains a local install; the listing is not a hosted bridge endpoint.
+The bridge is indexed in the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.AV-Labs-Co%2Fcos-codex-bridge) and [Glama](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge). These are discovery listings; the bridge still installs and runs locally.
 
 In stable `0.1.2`, doctor and CLI help still display the previous runtime label `0.1.1`; the installed npm package and Registry descriptor are `0.1.2`. A follow-up release will align that display label.
 

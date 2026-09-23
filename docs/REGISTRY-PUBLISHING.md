@@ -15,11 +15,15 @@ The package includes no private configuration. The installer creates a local `co
 
 ## Official MCP Registry
 
-The Registry entry is separate from npm. Until its public API returns `io.github.AV-Labs-Co/cos-codex-bridge`, do not claim the Registry listing is live or show a Registry badge. The Registry's GitHub Actions identity permits the **case-sensitive** `io.github.AV-Labs-Co/*` namespace. Stable `0.1.2` corrected the descriptor and npm `mcpName` capitalization; MCP tool behavior is unchanged. Its doctor still displays the runtime label `0.1.1`. The `0.1.1` Registry attempt failed because its lowercase name did not match that identity.
+The [official Registry record](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.AV-Labs-Co%2Fcos-codex-bridge) is live. The public API returned `io.github.AV-Labs-Co/cos-codex-bridge`, version `0.1.2`, npm package `cos-codex-bridge@0.1.2` on 2026-09-23. [GitHub Actions run 35862746477](https://github.com/AV-Labs-Co/cos-codex-bridge/actions/runs/35862746477) completed every publish step. This is a metadata listing, not a hosted endpoint.
 
-1. Confirm `npm view cos-codex-bridge dist-tags --json` maps `latest` to `0.1.2`.
-2. On the main branch, manually run `Publish stable MCP Registry entry` from GitHub Actions. Its read-only checkout uses the exact `v0.1.2` commit and confirms that the descriptor matches the already published npm metadata.
-3. The workflow downloads the checksum-verified official publisher, validates the descriptor, authenticates through GitHub Actions OIDC, and publishes. It stores no registry publishing token.
-4. Read `https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.AV-Labs-Co/cos-codex-bridge` and confirm the returned version and package. Only then add a Registry link to public copy. The beta descriptor can be considered later without changing npm's stable default.
+The Registry's GitHub Actions identity permits the **case-sensitive** `io.github.AV-Labs-Co/*` namespace. Stable `0.1.2` corrected the descriptor and npm `mcpName` capitalization; MCP tool behavior is unchanged. Its doctor still displays the runtime label `0.1.1`. The earlier `0.1.1` Registry attempt failed because its lowercase name did not match that identity.
+
+For a future stable update:
+
+1. Publish and verify the matching npm package first.
+2. Update the manual `Publish stable MCP Registry entry` workflow to check out the exact release commit and verify the same version and `mcpName` in npm.
+3. Run the workflow from main. It downloads the checksum-verified official publisher, validates the descriptor, authenticates through GitHub Actions OIDC, and publishes. It stores no registry publishing token.
+4. Confirm the new version and package in the public Registry API before changing public copy. The beta descriptor can be considered later without changing npm's stable default.
 
 The Registry's [GitHub Actions publishing guide](https://github.com/modelcontextprotocol/registry/blob/main/docs/modelcontextprotocol-io/github-actions.mdx) defines this flow. Avoid a broad permanent publishing token or a second daemon just to obtain a listing.
