@@ -6,13 +6,14 @@
 
 [![CI](https://github.com/AV-Labs-Co/cos-codex-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/AV-Labs-Co/cos-codex-bridge/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/AV-Labs-Co/cos-codex-bridge?include_prereleases&label=release)](https://github.com/AV-Labs-Co/cos-codex-bridge/releases)
+[![npm stable](https://img.shields.io/npm/v/cos-codex-bridge?label=npm%20stable)](https://www.npmjs.com/package/cos-codex-bridge)
 [![License: MIT](https://img.shields.io/badge/license-MIT-gold.svg)](LICENSE)
 [![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-43853d.svg)](https://nodejs.org/)
 [![CoS Codex Bridge MCP server – quality and maintenance score on Glama](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge/badges/score.svg)](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge)
 
 A local MCP server that lets a Chief of Staff client find Codex tasks, create project work, deliver whole prompts, follow progress and continue the same conversation. An optional Claude Code CLI route in the same MCP does this with local project folders and saved CLI sessions. Free MIT core. No bridge subscription or checkout. Your existing Codex or Claude Code access is required for real execution.
 
-**v0.2 beta.** Normal local MCP: install, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. The Codex core workflow has passed owner field testing on macOS; the Claude Code CLI route has passed local project/session tests. Desktop-owned paused-queue recovery remains a known Codex limitation. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
+**Choose your release:** [`0.1.1` on npm](https://www.npmjs.com/package/cos-codex-bridge) is the stable Codex-only route (`@latest`). [`0.2.0-beta.1`](https://www.npmjs.com/package/cos-codex-bridge/v/0.2.0-beta.1) adds Claude Code CLI support (`@beta`) in the same MCP. Install locally, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. The Codex core workflow and the Grok Bot → Claude Code CLI handoff have passed owner field testing on macOS. Desktop-owned paused-queue recovery remains a known Codex limitation. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
 
 ## What your Chief of Staff can do
 
@@ -63,7 +64,7 @@ Copy this installation request to your Chief of Staff:
 
 > Install CoS Codex Bridge from https://github.com/AV-Labs-Co/cos-codex-bridge. Read the README and SECURITY.md first. Use only a project folder I approve, keep read-only defaults, and preserve existing client configuration. Follow the installer instructions, run doctor, and connect the generated stdio MCP entry to my local client. Tell me what passed and what still needs setup. Wait for my first task before submitting any work. Do not publish or deploy anything.
 
-You can also download the source archive from [Releases](https://github.com/AV-Labs-Co/cos-codex-bridge/releases), extract it and follow the steps below. Git cloning makes later updates easier. No npm package or hosted endpoint is required.
+You can also download the source archive from [Releases](https://github.com/AV-Labs-Co/cos-codex-bridge/releases), extract it and follow the steps below. Git cloning makes later updates easier. A [public npm package](https://www.npmjs.com/package/cos-codex-bridge) is available, but no hosted endpoint is required.
 
 ## Install
 
@@ -78,6 +79,16 @@ node scripts/install.mjs --root /absolute/path/to/your/projects
 ```
 
 The installer writes a private config, launcher and MCP snippet under `~/.local/share/cos-codex-bridge`. Keep the checkout in place. Default execution is read-only; use `--write` only for approved project edits. Choose specific project roots, never your entire home directory. Add `--codex /absolute/path/to/codex` or `--claude /absolute/path/to/claude` if either CLI is not on the MCP client's PATH. See [installer and upgrade steps](INSTALLER.md).
+
+If you prefer npm to Git, install a pinned release into a dedicated folder, then run its same local installer. Use `@0.1.1` for stable Codex only or `@0.2.0-beta.1` for Codex plus the Claude Code CLI preview:
+
+```sh
+mkdir -p "$HOME/.local/share/cos-codex-bridge-package"
+npm install --prefix "$HOME/.local/share/cos-codex-bridge-package" cos-codex-bridge@0.2.0-beta.1
+node "$HOME/.local/share/cos-codex-bridge-package/node_modules/cos-codex-bridge/scripts/install.mjs" --root "/absolute/path/to/your/projects"
+```
+
+Keep that package folder: the generated launcher points to it. The npm path was checked with a clean `@beta` install, isolated demo config and `doctor`. The installer does not edit any MCP client settings for you.
 
 ```sh
 ~/.local/share/cos-codex-bridge/cos-codex-bridge doctor
