@@ -13,7 +13,11 @@
 
 A local MCP server that lets a Chief of Staff client find Codex tasks, create project work, deliver whole prompts, follow progress and continue the same conversation. An optional Claude Code CLI route in the same MCP does this with local project folders and saved CLI sessions. Free MIT core. No bridge subscription or checkout. Your existing Codex or Claude Code access is required for real execution.
 
-**Choose your release:** [`0.1.1` on npm](https://www.npmjs.com/package/cos-codex-bridge) is the stable Codex-only route (`@latest`). [`0.2.0-beta.1`](https://www.npmjs.com/package/cos-codex-bridge/v/0.2.0-beta.1) adds Claude Code CLI support (`@beta`) in the same MCP. Install locally, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. The Codex core workflow and the Grok Bot → Claude Code CLI handoff have passed owner field testing on macOS. Desktop-owned paused-queue recovery remains a known Codex limitation. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
+**Choose your release:** [`0.1.2` on npm](https://www.npmjs.com/package/cos-codex-bridge) is the stable Codex-only route (`@latest`). [`0.2.0-beta.1`](https://www.npmjs.com/package/cos-codex-bridge/v/0.2.0-beta.1) adds Claude Code CLI support (`@beta`) in the same MCP. Install locally, connect your client, then use the `bridge_*` tools. No daemon or Desktop-owner adapter installation is required. The Codex core workflow and the Grok Bot → Claude Code CLI handoff have passed owner field testing on macOS. Desktop-owned paused-queue recovery remains a known Codex limitation. Sidebar rendering on newer Codex Desktop versions is not certified; check the compatibility table before relying on it. A queued receipt is never proof that work started.
+
+You can also find the [Glama directory listing](https://glama.ai/mcp/servers/AV-Labs-Co/cos-codex-bridge). This remains a local install; the listing is not a hosted bridge endpoint.
+
+In stable `0.1.2`, doctor and CLI help still display the previous runtime label `0.1.1`; the installed npm package and Registry descriptor are `0.1.2`. A follow-up release will align that display label.
 
 ## What your Chief of Staff can do
 
@@ -80,7 +84,7 @@ node scripts/install.mjs --root /absolute/path/to/your/projects
 
 The installer writes a private config, launcher and MCP snippet under `~/.local/share/cos-codex-bridge`. Keep the checkout in place. Default execution is read-only; use `--write` only for approved project edits. Choose specific project roots, never your entire home directory. Add `--codex /absolute/path/to/codex` or `--claude /absolute/path/to/claude` if either CLI is not on the MCP client's PATH. See [installer and upgrade steps](INSTALLER.md).
 
-If you prefer npm to Git, install a pinned release into a dedicated folder, then run its same local installer. Use `@0.1.1` for stable Codex only or `@0.2.0-beta.1` for Codex plus the Claude Code CLI preview:
+If you prefer npm to Git, install a pinned release into a dedicated folder, then run its same local installer. Use `@0.1.2` for stable Codex only or `@0.2.0-beta.1` for Codex plus the Claude Code CLI preview:
 
 ```sh
 mkdir -p "$HOME/.local/share/cos-codex-bridge-package"
