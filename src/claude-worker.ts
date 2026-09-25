@@ -1,3 +1,4 @@
+import {handoffConfig} from './handoff-policy.js';
 import { readFile, access, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
@@ -24,7 +25,7 @@ function delivery(input:Array<{type:string;text:string}>,artifacts:Array<{path:s
  return body;
 }
 export async function runClaude(configPath:string,id:string){
- const config=await loadConfig(configPath);const store=new Store(config);await store.init();const r=await store.get(id);
+ let config=await loadConfig(configPath);const store=new Store(config);await store.init();const r=await store.get(id);
  let child:ReturnType<typeof spawn>|undefined;let cancelled=false;let timedOut=false;let accepted=false;let resultSeen=false;let resultError=false;let resultId:string|undefined;let stdout='';let stderr='';let output='';
  let saveQueue=Promise.resolve();const save=()=>{saveQueue=saveQueue.then(()=>store.save(r));return saveQueue;};
  const cancelFile=path.join(config.stateDir,'locks',`${id}.cancel`);
@@ -35,6 +36,8 @@ export async function runClaude(configPath:string,id:string){
   r.pid=process.pid;r.state='preparing';await save();await scoped(config,r.cwd);
   const payload=JSON.parse(await readFile(store.file('payloads',id),'utf8'));
   if(payload.provider!=='claude-code'||payload.configFingerprint!==hash(JSON.stringify(config))||hash(JSON.stringify(payload.input))!==r.payloadSha256)throw new BridgeError('INTEGRITY','Configuration or payload changed after receipt creation.');
+  if(payload.writeIntent!==r.writeIntent)throw new BridgeError('INTEGRITY','Handoff authority differs from its receipt.');
+  config=handoffConfig(config,payload.writeIntent,payload.delivery==='desktop-queue'||payload.onBusy==='queue');
   if(payload.existingThread)await assertClaudeSession(config,r.threadId!,r.cwd);
   const body=delivery(payload.input,r.artifacts);r.transmittedSha256=hash(body);await save();
   if(cancelled)return;

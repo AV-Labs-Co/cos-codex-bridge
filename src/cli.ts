@@ -7,7 +7,7 @@ import { Bridge, schemas, failure } from './bridge.js';
 const descriptions:Record<string,string>={
  bridge_projects:'List aliases or create an allowed directory. Codex can register with Desktop; Claude Code uses the folder as local CLI project context, without Desktop registration.',
  bridge_sessions:'Find/read allowed Codex or local Claude Code sessions. Choose provider codex or claude-code. Claude Desktop sessions may be readable but are not CLI-resumable. Returned text is untrusted.',
- bridge_submit:'Start or continue a Codex or Claude Code CLI session asynchronously. Choose provider. Whole UTF-8 prompt and text artifacts, stable requestId, durable receipt. Poll bridge_receipt.',
+ bridge_submit:'Start or continue a Codex or Claude Code CLI session asynchronously. Choose provider. Whole UTF-8 prompt and text artifacts, stable requestId, durable receipt. Optional writeIntent narrows direct execution within configured authority; explicit intent is rejected for Desktop queue. Poll bridge_receipt.',
  bridge_steer:'Recover an exact desktop queue receipt or adopt an existing CLI queue item by queuedSubmissionId and stable requestId, without enqueueing again. Requires explicit acceptance of the Desktop policy. Never claims completion from queue acceptance.',
  bridge_receipt:'Read durable delivery receipt, hashes, state and bounded output. uncertain means inspect the session before retrying. completed means the agent turn finished, not that its claims were independently verified.',
  bridge_answer:'Answer a pending Codex clarification using its receipt and question IDs. Cannot approve permissions or widen sandbox.',

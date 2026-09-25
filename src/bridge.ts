@@ -1,3 +1,4 @@
+import {handoffConfig} from './handoff-policy.js';
 import { readFile, mkdir, open, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,7 +14,7 @@ const provider=z.enum(['codex','claude-code']).default('codex');
 export const schemas={
  bridge_projects:z.object({action:z.enum(['list','create','register','inspect']).default('list'),provider,project:z.string().optional(),parent:z.string().optional(),name:z.string().regex(/^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/).optional()}).strict(),
  bridge_sessions:z.object({action:z.enum(['find','read']).default('find'),provider,project:z.string().optional(),query:z.string().max(200).optional(),cursor:z.string().max(2048).optional(),threadId:z.string().max(200).optional(),includeOutput:z.boolean().default(false),includeQueue:z.boolean().default(false)}).strict(),
- bridge_submit:z.object({provider,onBusy:z.enum(['reject','queue']).default('reject'),delivery:z.enum(['direct','desktop-queue']).default('direct'),acceptDesktopPolicy:z.boolean().default(false),project:z.string(),threadId:z.string().max(200).optional(),prompt:z.string().optional(),promptFile:z.string().optional(),artifacts:z.array(z.string()).max(8).default([]),requestId:z.string().regex(/^[a-zA-Z0-9_-]{8,100}$/)}).strict(),
+ bridge_submit:z.object({provider,writeIntent:z.enum(['read-only','workspace-write']).optional(),onBusy:z.enum(['reject','queue']).default('reject'),delivery:z.enum(['direct','desktop-queue']).default('direct'),acceptDesktopPolicy:z.boolean().default(false),project:z.string(),threadId:z.string().max(200).optional(),prompt:z.string().optional(),promptFile:z.string().optional(),artifacts:z.array(z.string()).max(8).default([]),requestId:z.string().regex(/^[a-zA-Z0-9_-]{8,100}$/)}).strict(),
  bridge_steer:z.object({threadId:z.string().min(1),receiptId:z.string().optional(),queuedSubmissionId:z.string().optional(),requestId:z.string().regex(/^[a-zA-Z0-9_-]{8,100}$/).optional(),acceptDesktopPolicy:z.literal(true)}).strict(),
  bridge_receipt:z.object({receiptId:z.string(),includeOutput:z.boolean().default(true)}).strict(),
  bridge_answer:z.object({receiptId:z.string(),questionId:z.string().regex(/^[a-f0-9]{64}$/),answers:z.record(z.string().max(200),z.object({answers:z.array(z.string().max(8000)).max(20)}).strict())}).strict(),
@@ -95,6 +96,7 @@ export class Bridge {
  async readText(file:string,max:number){const p=await scoped(this.config,file,false);const s=await stat(p);if(s.size>max)throw new BridgeError('SIZE_LIMIT',`File exceeds ${max} bytes.`);const b=await readFile(p);const text=new TextDecoder('utf-8',{fatal:true}).decode(b);textLimit(text,max,'File');return {path:p,text};}
  async submit(args:any){
   const queueRequested=args.onBusy==='queue'||args.delivery==='desktop-queue';
+  const effective=handoffConfig(this.config,args.writeIntent,queueRequested);
   if(args.provider==='claude-code'&&this.config.mode==='demo')throw new BridgeError('UNSUPPORTED','Claude Code cannot run in the model-free Codex demo configuration.');
   if(args.provider==='claude-code'&&queueRequested)throw new BridgeError('UNSUPPORTED','Claude Code queue delivery is not implemented. Use a saved idle CLI session or wait for its current turn. Nothing was sent.');
   if(queueRequested&&(!args.threadId||!args.acceptDesktopPolicy||this.config.mode!=='codex'))throw new BridgeError('DESKTOP_POLICY_REQUIRED','Desktop queue requires an existing task, codex mode and acceptDesktopPolicy:true. Existing Desktop permissions apply.');
@@ -105,7 +107,7 @@ export class Bridge {
   const artifacts=[];const input=[{type:'text',text:prompt}];let total=bytes;
   for(const file of args.artifacts){const a=await this.readText(file,MAX_PROMPT);total+=Buffer.byteLength(a.text);artifacts.push({path:a.path,bytes:Buffer.byteLength(a.text),sha256:hash(a.text)});input.push({type:'text',text:a.text});}
   if(total>MAX_PROMPT)throw new BridgeError('SIZE_LIMIT','Combined prompt and artifacts exceed 256 KiB. Nothing was sent.');
-  const fingerprintFields={cwd,threadId:args.threadId??null,input,artifacts,onBusy:args.onBusy??'reject',delivery:args.delivery??'direct',acceptDesktopPolicy:args.acceptDesktopPolicy??false,mode:this.config.mode,sandbox:this.config.sandbox,model:this.config.model??null};
+  const fingerprintFields={cwd,threadId:args.threadId??null,input,artifacts,onBusy:args.onBusy??'reject',delivery:args.delivery??'direct',acceptDesktopPolicy:args.acceptDesktopPolicy??false,mode:this.config.mode,sandbox:this.config.sandbox,model:this.config.model??null,...(args.writeIntent?{writeIntent:args.writeIntent}: {})};
   // Preserve the original Codex hash exactly so pre-upgrade request IDs still replay.
   const fingerprint=hash(JSON.stringify(args.provider==='codex'?fingerprintFields:{provider:'claude-code',...fingerprintFields,model:this.config.claudeModel??null}));
   const id=hash(args.requestId);const unlock=await this.store.lock('submit');
@@ -117,8 +119,8 @@ export class Bridge {
    const active=jobs.filter(r=>['busy','queued','preparing','accepted','steered','delivered','blocked'].includes(r.state)&&(alive(r.pid)||Date.now()-Date.parse(r.createdAt)<30000));
    if(active.length>=this.config.maxConcurrent)throw new BridgeError('CAPACITY','Concurrent job limit reached; poll existing receipts.');
    if(args.threadId&&active.some(r=>r.threadId===args.threadId))throw new BridgeError('SESSION_BUSY','A bridge job is already running for this thread.');
-   const now=new Date().toISOString();const receipt:Receipt={id,key:args.requestId,fingerprint,mode:args.provider==='claude-code'?'claude-code':this.config.mode,provider:args.provider,cwd,createdAt:now,updatedAt:now,state:'queued',promptBytes:bytes,promptSha256:hash(prompt),payloadSha256:hash(JSON.stringify(input)),artifacts,threadId:args.threadId??(args.provider==='claude-code'?newClaudeSessionId():undefined),...(args.provider==='claude-code'?{sessionConfirmed:false}:{})};
-   await this.store.atomic(this.store.file('payloads',id),{provider:args.provider,input,onBusy:args.onBusy,delivery:args.delivery,existingThread:!!args.threadId,configFingerprint:hash(JSON.stringify(this.config))});
+   const now=new Date().toISOString();const receipt:Receipt={id,key:args.requestId,fingerprint,mode:args.provider==='claude-code'?'claude-code':this.config.mode,provider:args.provider,writeIntent:args.writeIntent,effectiveSandbox:queueRequested?'desktop-policy':effective.sandbox,cwd,createdAt:now,updatedAt:now,state:'queued',promptBytes:bytes,promptSha256:hash(prompt),payloadSha256:hash(JSON.stringify(input)),artifacts,threadId:args.threadId??(args.provider==='claude-code'?newClaudeSessionId():undefined),...(args.provider==='claude-code'?{sessionConfirmed:false}:{})};
+   await this.store.atomic(this.store.file('payloads',id),{provider:args.provider,writeIntent:args.writeIntent,input,onBusy:args.onBusy,delivery:args.delivery,existingThread:!!args.threadId,configFingerprint:hash(JSON.stringify(this.config))});
    await this.store.save(receipt);
    const worker=args.provider==='claude-code'?'./claude-worker.js':'./worker.js';
    const child=spawn(process.execPath,[fileURLToPath(new URL(worker,import.meta.url)),this.config.configPath,id],{detached:true,stdio:'ignore',env:process.env});

@@ -1,3 +1,4 @@
+import {handoffConfig} from './handoff-policy.js';
 import { readFile, access, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { loadConfig, BridgeError, scoped } from './config.js';
@@ -8,7 +9,7 @@ import { runQueue } from './queue.js';
 import { Desktop } from './desktop.js';
 import { failure } from './bridge.js';
 export async function work(configPath:string,id:string,steerOnly=false){
- const config=await loadConfig(configPath);const store=new Store(config);await store.init();let r=await store.get(id);const backend=new Backend(config,store);
+ let config=await loadConfig(configPath);const store=new Store(config);await store.init();let r=await store.get(id);const backend=new Backend(config,store);
  let release:(()=>Promise<void>)|undefined;let rpc:Rpc|undefined;let timer:NodeJS.Timeout|undefined;let watchdog:NodeJS.Timeout|undefined;
  let progress:NodeJS.Timeout|undefined;const questions=new Map<string,string|number>();let polling=false;
  let saveQueue=Promise.resolve();const save=()=>{saveQueue=saveQueue.then(()=>store.save(r));return saveQueue;};
@@ -24,6 +25,8 @@ export async function work(configPath:string,id:string,steerOnly=false){
   r.pid=process.pid;r.state='preparing';await save();await scoped(config,r.cwd);
   const payload=JSON.parse(await readFile(store.file('payloads',id),'utf8'));
   if(payload.configFingerprint!==hash(JSON.stringify(config))||hash(JSON.stringify(payload.input))!==r.payloadSha256)throw new BridgeError('INTEGRITY','Configuration or payload changed after receipt creation.');
+  if(payload.writeIntent!==r.writeIntent)throw new BridgeError('INTEGRITY','Handoff authority differs from its receipt.');
+  config=handoffConfig(config,payload.writeIntent,payload.delivery==='desktop-queue'||payload.onBusy==='queue');
   if(steerOnly||payload.delivery==='desktop-queue'){release=await store.lock(`thread:${r.threadId}`);await runQueue(config,store,r,payload.input,steerOnly);return;}
   if(r.threadId)release=await store.lock(`thread:${r.threadId}`);
   const cancelFile=path.join(config.stateDir,'locks',`${id}.cancel`);

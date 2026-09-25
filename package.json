@@ -38,7 +38,8 @@
     "docs/QUEUE.md",
     "docs/CLAUDE.md",
     "docs/SECURITY-REVIEW.md",
-    "server.json"
+    "server.json",
+    "docs/HANDOFF-PERMISSIONS.md"
   ],
   "scripts": {
     "build": "tsc",

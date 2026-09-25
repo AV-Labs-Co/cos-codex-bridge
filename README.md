@@ -151,6 +151,8 @@ Receipts distinguish `busy`, `queued`, `steered`, `delivered`, `completed`, `blo
 
 ## Security defaults
 
+**Source preview, not in npm 0.1.4 or 0.2.0-beta.1:** direct submissions now accept per-handoff `writeIntent`. A read-only handoff narrows a write-enabled configuration; a write handoff cannot expand configured authority. Desktop queue rejects explicit per-handoff intent because its existing permissions cannot be narrowed by this route. [Contract and examples](docs/HANDOFF-PERMISSIONS.md).
+
 Default-deny realpath allowlists, read-only direct execution, private local receipts, bounded UTF-8 input, explicit project/task matching and no implicit cloud endpoint. Prompts and artifacts are stored locally in plaintext for receipt integrity; do not treat them as encrypted storage.
 
 Direct workers disable inherited connectors and deny permission approvals. Desktop queue is a separate, explicit policy boundary: it uses the existing task's permissions and tools. The bridge cannot enforce a narrower sandbox inside that already-running task. No automatic store submission, social posting or publication is authorized. See [SECURITY.md](SECURITY.md).

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased source preview — per-handoff permissions
+
+Direct Codex and Claude Code submissions can request read-only or workspace-write authority within the configured permission ceiling. Receipts record the intent and effective policy; request-ID reuse with different intent is rejected. Explicit per-call intent fails before send for Desktop queue, where the bridge cannot narrow existing Desktop permissions. Omitting the field preserves prior behavior and request fingerprints. Published npm versions are unchanged.
+
 ## 0.2.0-beta.1 — Claude Code CLI route
 
 One local MCP now supports an optional `provider:"claude-code"` route alongside the default Codex route. It creates approved local project folders, starts and resumes saved Claude Code CLI sessions, finds and reads their transcripts, and shares durable request IDs, prompt/artifact hashes and cancellation. The bridge checks the returned session ID and refuses unsupported Claude Desktop session continuation rather than silently forking.
