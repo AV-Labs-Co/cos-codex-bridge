@@ -47,6 +47,8 @@ project screenshots.
 
 ## Try the safe demo
 
+**New here? [Start with the no-account quickstart](docs/QUICKSTART.md).** It uses the stable npm package, needs no Git clone, and shows what a completed receipt looks like. [Report your install result](https://github.com/AV-Labs-Co/cos-codex-bridge/issues/new?template=installation.yml), including which local MCP client you use.
+
 This exercises the MCP workflow locally without a Codex account, model call or project changes:
 
 This clone uses GitHub `main`, currently the Claude Code CLI preview (`0.2.0-beta.1`). To demo the stable Codex-only source instead, run `git checkout v0.1.4` after `cd cos-codex-bridge` and before `npm ci`.
