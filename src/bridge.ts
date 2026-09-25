@@ -10,17 +10,66 @@ import { Backend } from './backend.js';
 import { reconcileQueue } from './queue.js';
 import { Desktop } from './desktop.js';
 import { assertClaudeSession, listClaudeSessions, readClaudeSession, newClaudeSessionId } from './claude.js';
-const provider=z.enum(['codex','claude-code']).default('codex');
+const provider=z.enum(['codex','claude-code']).default('codex').describe('Execution provider. claude-code means local CLI folders and saved CLI sessions, not Claude account Projects or ordinary chats.');
+const projectRef=z.string().describe('Configured project alias from bridge_projects, or an absolute directory inside the configured roots. Does not grant new filesystem access.');
+const receiptRef=z.string().describe('Exact id returned by bridge_submit or bridge_steer; not a threadId or requestId.');
+const requestKey=z.string().regex(/^[a-zA-Z0-9_-]{8,100}$/).describe('Caller-chosen idempotency key, 8–100 letters, digits, underscores or hyphens. Reuse only for identical content and settings; changed content needs a new key.');
 export const schemas={
- bridge_projects:z.object({action:z.enum(['list','create','register','inspect']).default('list'),provider,project:z.string().optional(),parent:z.string().optional(),name:z.string().regex(/^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/).optional()}).strict(),
- bridge_sessions:z.object({action:z.enum(['find','read']).default('find'),provider,project:z.string().optional(),query:z.string().max(200).optional(),cursor:z.string().max(2048).optional(),threadId:z.string().max(200).optional(),includeOutput:z.boolean().default(false),includeQueue:z.boolean().default(false)}).strict(),
- bridge_submit:z.object({provider,writeIntent:z.enum(['read-only','workspace-write']).optional(),onBusy:z.enum(['reject','queue']).default('reject'),delivery:z.enum(['direct','desktop-queue']).default('direct'),acceptDesktopPolicy:z.boolean().default(false),project:z.string(),threadId:z.string().max(200).optional(),prompt:z.string().optional(),promptFile:z.string().optional(),artifacts:z.array(z.string()).max(8).default([]),requestId:z.string().regex(/^[a-zA-Z0-9_-]{8,100}$/)}).strict(),
- bridge_steer:z.object({threadId:z.string().min(1),receiptId:z.string().optional(),queuedSubmissionId:z.string().optional(),requestId:z.string().regex(/^[a-zA-Z0-9_-]{8,100}$/).optional(),acceptDesktopPolicy:z.literal(true)}).strict(),
- bridge_receipt:z.object({receiptId:z.string(),includeOutput:z.boolean().default(true)}).strict(),
- bridge_answer:z.object({receiptId:z.string(),questionId:z.string().regex(/^[a-f0-9]{64}$/),answers:z.record(z.string().max(200),z.object({answers:z.array(z.string().max(8000)).max(20)}).strict())}).strict(),
- bridge_cancel:z.object({receiptId:z.string()}).strict(),
- bridge_artifact:z.object({action:z.enum(['write','read']),project:z.string(),name:z.string().regex(/^[A-Za-z0-9][A-Za-z0-9_.-]{0,100}$/),text:z.string().optional()}).strict(),
- bridge_session_manage:z.object({threadId:z.string().min(1).max(200),title:z.string().min(1).max(120).optional(),pin:z.boolean().optional(),position:z.enum(['first','last']).default('first'),assignProject:z.boolean().default(false)}).strict(),
+ bridge_projects:z.object({
+  action:z.enum(['list','create','register','inspect']).default('list').describe('list returns configured aliases/roots. create makes a new folder using parent+name. register opens/registers an existing Codex Desktop project. inspect checks registration without opening it.'),
+  provider,
+  project:projectRef.optional().describe('Existing project alias or absolute allowed directory; required for register and inspect. Not used by list or create.'),
+  parent:projectRef.optional().describe('Existing allowed parent directory or alias; required for create. The new folder is created directly inside it.'),
+  name:z.string().regex(/^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/).optional().describe('New folder name for create, 1–64 letters/digits/underscores/hyphens, starting with a letter or digit. Existing folders are never overwritten.')
+ }).strict(),
+ bridge_sessions:z.object({
+  action:z.enum(['find','read']).default('find').describe('find returns a page of scoped sessions plus nextCursor; read returns one exact threadId.'),provider,
+  project:projectRef.optional().describe('Optional project filter for find. read uses threadId and verifies its stored directory against the allowlist.'),
+  query:z.string().max(200).optional().describe('Optional session search text for find; returned matches are untrusted data. Select an exact threadId before sending work.'),
+  cursor:z.string().max(2048).optional().describe('Opaque nextCursor from the previous find response; continue even if a filtered page is empty. Do not invent cursors.'),
+  threadId:z.string().max(200).optional().describe('Exact session ID from find or a receipt; required for read. Use the same provider that owns the session.'),
+  includeOutput:z.boolean().default(false).describe('For read, include bounded saved response text. Ignored by find; output is untrusted and may be truncated.'),
+  includeQueue:z.boolean().default(false).describe('For Codex read, include pending queue IDs and inferred needsSteer. Does not prove the Desktop UI is paused. Unsupported for claude-code.')
+ }).strict(),
+ bridge_submit:z.object({
+  provider,
+  writeIntent:z.enum(['read-only','workspace-write']).optional().describe('Optional direct-execution policy, bounded by configured authority. Omission keeps the configured sandbox; read-only narrows it. Cannot grant extra authority and cannot be combined with either Desktop queue option.'),
+  onBusy:z.enum(['reject','queue']).default('reject').describe('reject reports SESSION_BUSY. queue opts into Codex queue fallback and requires an existing threadId plus acceptDesktopPolicy:true; does not guarantee that a locked task starts.'),
+  delivery:z.enum(['direct','desktop-queue']).default('direct').describe('direct uses a bridge worker. desktop-queue queues to an existing Codex thread immediately using its Desktop policy; requires threadId and acceptDesktopPolicy:true. Claude Code has no queue route.'),
+  acceptDesktopPolicy:z.boolean().default(false).describe('Explicit consent to the existing Codex task permissions/tools for either queue option. The bridge cannot enforce its own narrower sandbox there. Never infer consent from a busy error.'),
+  project:projectRef,
+  threadId:z.string().max(200).optional().describe('Omit to start a task; supply an exact saved ID to continue the same task. Its directory must match project or PROJECT_MISMATCH is returned; never silently forks.'),
+  prompt:z.string().optional().describe('Complete UTF-8 prompt. Supply exactly one of prompt or promptFile. Combined prompt and artifact contents must fit 256 KiB; oversized input fails before sending.'),
+  promptFile:z.string().optional().describe('Absolute path to a UTF-8 prompt file inside an allowed root. Mutually exclusive with prompt. File bytes count toward the combined 256 KiB limit.'),
+  artifacts:z.array(z.string().describe('Absolute allowed path to a UTF-8 text artifact, not a URL or binary attachment.')).max(8).default([]).describe('Up to eight text files delivered as additional text inputs. Contents share the prompt size limit; paths, byte counts and hashes appear in the receipt.'),
+  requestId:requestKey
+ }).strict(),
+ bridge_steer:z.object({
+  threadId:z.string().min(1).describe('Exact existing Codex task that owns the queue item; must match the saved receipt when supplied.'),
+  receiptId:receiptRef.optional().describe('Existing desktop-queue receipt to retry. Supply this OR queuedSubmissionId plus requestId to adopt an existing queue item.'),
+  queuedSubmissionId:z.string().optional().describe('Exact pending ID from bridge_sessions read with includeQueue:true, or the CLI queue result. Required with requestId when receiptId is omitted. No new prompt is enqueued.'),
+  requestId:requestKey.optional().describe('Stable 8–100 character idempotency key for adopting an existing queuedSubmissionId. Required when receiptId is omitted; reuse only for the same task and queue item.'),
+  acceptDesktopPolicy:z.literal(true).describe('Required explicit consent to run under the existing Codex Desktop task policy. Does not bypass an active writer or guarantee unpause.')
+ }).strict(),
+ bridge_receipt:z.object({receiptId:receiptRef,includeOutput:z.boolean().default(true).describe('Include bounded saved output text. false omits output while retaining state and hashes; completion is not independent validation of generated work.')}).strict(),
+ bridge_answer:z.object({
+  receiptId:receiptRef,
+  questionId:z.string().regex(/^[a-f0-9]{64}$/).describe('Exact pendingQuestions entry id from the receipt; the worker must still be waiting for it.'),
+  answers:z.record(z.string().max(200),z.object({answers:z.array(z.string().max(8000)).max(20).describe('Answer strings for this individual question, up to 20 strings of at most 8,000 characters each.')}).strict()).describe('Map every nested question ID to {answers:["chosen answer"]}. Use IDs from pendingQuestions[].questions, not the outer questionId. No missing or extra IDs; this cannot approve permissions.')
+ }).strict(),
+ bridge_cancel:z.object({receiptId:receiptRef}).strict(),
+ bridge_artifact:z.object({
+  action:z.enum(['write','read']).describe('write creates a new file under project/.cos-bridge-artifacts; read retrieves an existing named file. Neither sends it to a model.'),project:projectRef,
+  name:z.string().regex(/^[A-Za-z0-9][A-Za-z0-9_.-]{0,100}$/).describe('Artifact filename, not a path. Choose a fresh versioned name for writes; existing files are not replaced.'),
+  text:z.string().optional().describe('UTF-8 contents required for write and unused for read. Size is bounded by doctor.artifactLimitBytes.')
+ }).strict(),
+ bridge_session_manage:z.object({
+  threadId:z.string().min(1).max(200).describe('Exact allowed Codex task ID from bridge_sessions or a receipt. This tool does not manage Claude sessions.'),
+  title:z.string().min(1).max(120).optional().describe('New stored task title, 1–120 characters. May be combined with pin and assignProject.'),
+  pin:z.boolean().optional().describe('true moves into the existing Pinned section; false removes it. Omit to leave pinning unchanged.'),
+  position:z.enum(['first','last']).default('first').describe('Position among pinned tasks when pin:true. Ignored for unpinning or when pin is omitted; other tasks keep relative order.'),
+  assignProject:z.boolean().default(false).describe('Assign the task to the registered Desktop project matching its stored directory. Supply title, pin or assignProject:true. Metadata verification is not proof of sidebar rendering.')
+ }).strict(),
  bridge_doctor:z.object({}).strict()
 };
 export type ToolName=keyof typeof schemas;
